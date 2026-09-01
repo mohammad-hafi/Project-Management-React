@@ -1,9 +1,20 @@
-
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import ProjectsPage from "./pages/ProjectsPage/ProjectsPage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 function App() {
   return (
-    <div>
-      <h1>Project Manager</h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/projects" element={<ProjectsPage />} />
+        </Route>
+
+        <Route path="/" element={<Navigate to="/projects" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
