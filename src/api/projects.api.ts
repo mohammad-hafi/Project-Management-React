@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { Project,PaginatedProjectsResponse } from "../types/project";
+import type { Project,PaginatedProjectsResponse,CreateProjectRequest } from "../types/project";
 
 export async function getProjects(pageNumber=1,pageSize=10): Promise<PaginatedProjectsResponse>
 {
@@ -18,3 +18,15 @@ export async function getProjectById(id: number):Promise<Project>
 
     return response.data;
 }
+
+export async function createProject(
+    credentials:CreateProjectRequest
+):Promise<Project>
+{
+    const response= await apiClient.post<Project>(
+        "/projects",
+        credentials
+    )
+    return response.data;
+}
+

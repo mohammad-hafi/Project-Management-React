@@ -1,11 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../auth/AuthContext";
-import { getProjects } from "../../api/projects.api";
+import { getProjects, createProject } from "../../api/projects.api";
 import type { Project } from "../../types/project";
 
 export default function ProjectsPage() {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [statusId, setStatusId] = useState(1);
+  const [priorityLevel, setPriorityLevel] = useState(1);
+  const [startDate, setStartDate] = useState("");
+  const [targetDate, setTargetDate] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+  const [createError, setCreateError] = useState("");
+
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -16,6 +25,41 @@ export default function ProjectsPage() {
   const [totalPages, setTotalPages] = useState(1);
 
   const pageSize = 3;
+
+  async function handleCreateProject(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    setIsCreating(true);
+    setCreateError("");
+
+    try {
+      await createProject({
+        name,
+        description,
+        statusId,
+        priorityLevel,
+        startDate: new Date(startDate).toISOString(),
+        targetDate: new Date(targetDate).toISOString(),
+      });
+
+      setName("");
+      setDescription("");
+      setStatusId(1);
+      setPriorityLevel(1);
+      setStartDate("");
+      setTargetDate("");
+
+      const data = await getProjects(pageNumber, pageSize);
+
+      setProjects(data.items);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("CREATE PROJECT ERROR:", error);
+      setCreateError("Failed to create project.");
+    } finally {
+      setIsCreating(false);
+    }
+  }
 
   useEffect(() => {
     async function loadProjects() {
@@ -54,6 +98,80 @@ export default function ProjectsPage() {
 
   return (
     <main>
+      <form onSubmit={handleCreateProject}>
+        <h2>Create Project</h2>
+
+        <div>
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="description">Description</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="statusId">Status ID</label>
+          <input
+            id="statusId"
+            type="number"
+            value={statusId}
+            onChange={(event) => setStatusId(Number(event.target.value))}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="priorityLevel">Priority Level</label>
+          <input
+            id="priorityLevel"
+            type="number"
+            value={priorityLevel}
+            onChange={(event) => setPriorityLevel(Number(event.target.value))}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="startDate">Start Date</label>
+          <input
+            id="startDate"
+            type="datetime-local"
+            value={startDate}
+            onChange={(event) => setStartDate(event.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label htmlFor="targetDate">Target Date</label>
+          <input
+            id="targetDate"
+            type="datetime-local"
+            value={targetDate}
+            onChange={(event) => setTargetDate(event.target.value)}
+            required
+          />
+        </div>
+
+        {createError && <p>{createError}</p>}
+
+        <button type="submit" disabled={isCreating}>
+          {isCreating ? "Creating..." : "Create Project"}
+        </button>
+      </form>
       <h1>Projects</h1>
 
       <button onClick={handleLogout}>Logout</button>
