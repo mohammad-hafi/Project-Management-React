@@ -230,6 +230,13 @@ export default function ProjectsPage() {
           <h2>{project.name}</h2>
           <p>{project.description}</p>
 
+          <button
+            type="button"
+            onClick={() => navigate(`/projects/${project.id}`)}
+          >
+            View
+          </button>
+
           <button type="button" onClick={() => handleEditProject(project)}>
             Edit
           </button>
