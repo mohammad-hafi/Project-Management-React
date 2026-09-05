@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { Project,PaginatedProjectsResponse,CreateProjectRequest } from "../types/project";
+import type { Project,PaginatedProjectsResponse,CreateProjectRequest,UpdateProjectRequest } from "../types/project";
 
 export async function getProjects(pageNumber=1,pageSize=10): Promise<PaginatedProjectsResponse>
 {
@@ -30,3 +30,17 @@ export async function createProject(
     return response.data;
 }
 
+export async function deleteProject(id:number):Promise<void>
+{
+    await apiClient.delete(`/projects/${id}`);
+}
+
+
+export async function updateProject(project:UpdateProjectRequest):Promise<Project>
+{
+    const responce= await apiClient.put<Project>(
+    "/projects/update",
+    project)
+
+    return responce.data;
+}

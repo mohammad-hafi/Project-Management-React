@@ -2,7 +2,12 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../auth/AuthContext";
-import { getProjects, createProject } from "../../api/projects.api";
+import {
+  getProjects,
+  createProject,
+  deleteProject,
+  updateProject,
+} from "../../api/projects.api";
 import type { Project } from "../../types/project";
 
 export default function ProjectsPage() {
@@ -14,6 +19,7 @@ export default function ProjectsPage() {
   const [targetDate, setTargetDate] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState("");
+  const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
 
   const navigate = useNavigate();
   const { logout } = useAuth();
@@ -26,21 +32,55 @@ export default function ProjectsPage() {
 
   const pageSize = 3;
 
-  async function handleCreateProject(event: FormEvent<HTMLFormElement>) {
+  function handleEditProject(project: Project) {
+    setEditingProjectId(project.id);
+
+    setName(project.name);
+    setDescription(project.description);
+    setStatusId(project.statusId);
+    setPriorityLevel(project.priorityLevel);
+
+    setStartDate(project.startDate.slice(0, 16));
+    setTargetDate(project.targetDate.slice(0, 16));
+  }
+  async function handleDelete(id: number) {
+    try {
+      await deleteProject(id);
+
+      const data = await getProjects(pageNumber, pageSize);
+      setProjects(data.items);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("DELETE PROJECT ERROR:", error);
+    }
+  }
+  async function handleSubmitProject(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     setIsCreating(true);
     setCreateError("");
 
     try {
-      await createProject({
+      const projectData = {
         name,
         description,
         statusId,
         priorityLevel,
         startDate: new Date(startDate).toISOString(),
         targetDate: new Date(targetDate).toISOString(),
-      });
+      };
+
+      if (editingProjectId === null) {
+        await createProject(projectData);
+      } else {
+        await updateProject({
+          id: editingProjectId,
+          ...projectData,
+        });
+      }
+      await loadProjects();
+
+      setEditingProjectId(null);
 
       setName("");
       setDescription("");
@@ -48,38 +88,30 @@ export default function ProjectsPage() {
       setPriorityLevel(1);
       setStartDate("");
       setTargetDate("");
-
-      const data = await getProjects(pageNumber, pageSize);
-
-      setProjects(data.items);
-      setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("CREATE PROJECT ERROR:", error);
-      setCreateError("Failed to create project.");
+      console.error("SAVE PROJECT ERROR:", error);
+      setCreateError("Failed to save project.");
     } finally {
       setIsCreating(false);
     }
   }
 
-  useEffect(() => {
-    async function loadProjects() {
-      setIsLoading(true);
-      setError("");
-      try {
-        const data = await getProjects(pageNumber, pageSize);
+  async function loadProjects() {
+    setIsLoading(true);
+    setError("");
+    try {
+      const data = await getProjects(pageNumber, pageSize);
 
-        console.log("PROJECTS RESPONSE:", data);
-
-        setProjects(data.items);
-        setTotalPages(data.totalPages);
-      } catch (error) {
-        console.error("PROJECTS ERROR:", error);
-        setError("Failed to load projects.");
-      } finally {
-        setIsLoading(false);
-      }
+      setProjects(data.items);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error("PROJECTS ERROR:", error);
+      setError("Failed to load projects.");
+    } finally {
+      setIsLoading(false);
     }
-
+  }
+  useEffect(() => {
     loadProjects();
   }, [pageNumber]);
 
@@ -95,12 +127,10 @@ export default function ProjectsPage() {
   if (error) {
     return <p>{error}</p>;
   }
-
   return (
     <main>
-      <form onSubmit={handleCreateProject}>
-        <h2>Create Project</h2>
-
+      <form onSubmit={handleSubmitProject}>
+        <h2>{editingProjectId === null ? "Create Project" : "Edit Project"}</h2>
         <div>
           <label htmlFor="name">Name</label>
           <input
@@ -169,17 +199,44 @@ export default function ProjectsPage() {
         {createError && <p>{createError}</p>}
 
         <button type="submit" disabled={isCreating}>
-          {isCreating ? "Creating..." : "Create Project"}
+          {isCreating
+            ? "Saving..."
+            : editingProjectId === null
+              ? "Create Project"
+              : "Update Project"}
         </button>
+        {editingProjectId !== null && (
+          <button
+            type="button"
+            onClick={() => {
+              setEditingProjectId(null);
+              setName("");
+              setDescription("");
+              setStatusId(1);
+              setPriorityLevel(1);
+              setStartDate("");
+              setTargetDate("");
+            }}
+          >
+            Cancel Edit
+          </button>
+        )}
       </form>
       <h1>Projects</h1>
 
       <button onClick={handleLogout}>Logout</button>
-
       {projects.map((project) => (
         <div key={project.id}>
           <h2>{project.name}</h2>
           <p>{project.description}</p>
+
+          <button type="button" onClick={() => handleEditProject(project)}>
+            Edit
+          </button>
+
+          <button type="button" onClick={() => handleDelete(project.id)}>
+            Delete
+          </button>
         </div>
       ))}
 
