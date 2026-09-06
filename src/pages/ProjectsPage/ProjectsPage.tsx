@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import ProjectForm from "../../components/ProjectForm";
-import { useAuth } from "../../auth/useAuth";
 import {
   getProjects,
   createProject,
@@ -22,9 +20,6 @@ export default function ProjectsPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [createError, setCreateError] = useState("");
   const [editingProjectId, setEditingProjectId] = useState<number | null>(null);
-
-  const navigate = useNavigate();
-  const { logout } = useAuth();
 
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -119,11 +114,6 @@ export default function ProjectsPage() {
   useEffect(() => {
     loadProjects();
   }, [loadProjects]);
-
-  function handleLogout() {
-    logout();
-    navigate("/login", { replace: true });
-  }
 
   if (isLoading) {
     return <p>Loading projects...</p>;
