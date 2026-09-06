@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-
+import ProjectForm from "../../components/ProjectForm";
 import { useAuth } from "../../auth/AuthContext";
 import {
   getProjects,
@@ -9,6 +9,7 @@ import {
   updateProject,
 } from "../../api/projects.api";
 import type { Project } from "../../types/project";
+import ProjectCard from "../../components/ProjectCard";
 
 export default function ProjectsPage() {
   const [name, setName] = useState("");
@@ -129,122 +130,43 @@ export default function ProjectsPage() {
   }
   return (
     <main>
-      <form onSubmit={handleSubmitProject}>
-        <h2>{editingProjectId === null ? "Create Project" : "Edit Project"}</h2>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input
-            id="name"
-            type="text"
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="statusId">Status ID</label>
-          <input
-            id="statusId"
-            type="number"
-            value={statusId}
-            onChange={(event) => setStatusId(Number(event.target.value))}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="priorityLevel">Priority Level</label>
-          <input
-            id="priorityLevel"
-            type="number"
-            value={priorityLevel}
-            onChange={(event) => setPriorityLevel(Number(event.target.value))}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="startDate">Start Date</label>
-          <input
-            id="startDate"
-            type="datetime-local"
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="targetDate">Target Date</label>
-          <input
-            id="targetDate"
-            type="datetime-local"
-            value={targetDate}
-            onChange={(event) => setTargetDate(event.target.value)}
-            required
-          />
-        </div>
-
-        {createError && <p>{createError}</p>}
-
-        <button type="submit" disabled={isCreating}>
-          {isCreating
-            ? "Saving..."
-            : editingProjectId === null
-              ? "Create Project"
-              : "Update Project"}
-        </button>
-        {editingProjectId !== null && (
-          <button
-            type="button"
-            onClick={() => {
-              setEditingProjectId(null);
-              setName("");
-              setDescription("");
-              setStatusId(1);
-              setPriorityLevel(1);
-              setStartDate("");
-              setTargetDate("");
-            }}
-          >
-            Cancel Edit
-          </button>
-        )}
-      </form>
+      <ProjectForm
+        name={name}
+        description={description}
+        statusId={statusId}
+        priorityLevel={priorityLevel}
+        startDate={startDate}
+        targetDate={targetDate}
+        isCreating={isCreating}
+        createError={createError}
+        isEditing={editingProjectId !== null}
+        onNameChange={setName}
+        onDescriptionChange={setDescription}
+        onStatusIdChange={setStatusId}
+        onPriorityLevelChange={setPriorityLevel}
+        onStartDateChange={setStartDate}
+        onTargetDateChange={setTargetDate}
+        onSubmit={handleSubmitProject}
+        onCancelEdit={() => {
+          setEditingProjectId(null);
+          setName("");
+          setDescription("");
+          setStatusId(1);
+          setPriorityLevel(1);
+          setStartDate("");
+          setTargetDate("");
+        }}
+      />
       <h1>Projects</h1>
 
       <button onClick={handleLogout}>Logout</button>
       {projects.map((project) => (
-        <div key={project.id}>
-          <h2>{project.name}</h2>
-          <p>{project.description}</p>
-
-          <button
-            type="button"
-            onClick={() => navigate(`/projects/${project.id}`)}
-          >
-            View
-          </button>
-
-          <button type="button" onClick={() => handleEditProject(project)}>
-            Edit
-          </button>
-
-          <button type="button" onClick={() => handleDelete(project.id)}>
-            Delete
-          </button>
-        </div>
+        <ProjectCard
+          key={project.id}
+          project={project}
+          onEdit={handleEditProject}
+          onDelete={handleDelete}
+        />
       ))}
 
       <div>

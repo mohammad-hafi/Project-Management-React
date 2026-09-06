@@ -5,6 +5,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import PublicRoute from "./routes/PublicRoute";
 import ProjectDetailsPage from "./pages/ProjectsPage/ProjectDetailsPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import AppLayout from "./layout/AppLayout";
 function App() {
   return (
     <BrowserRouter>
@@ -13,9 +14,15 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
         </Route>
         <Route element={<ProtectedRoute />}>
-          <Route path="/projects" element={<ProjectsPage />} />
+          <Route element={<AppLayout />}>
+            <Route path="/projects" element={<ProjectsPage />} />
+
+            <Route
+              path="/projects/:projectId"
+              element={<ProjectDetailsPage />}
+            />
+          </Route>
         </Route>
-        <Route path="/projects/:projectId" element={<ProjectDetailsPage />} />
         <Route path="/" element={<Navigate to="/projects" replace />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
