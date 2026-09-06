@@ -153,9 +153,7 @@ export default function ProjectsPage() {
         onSubmit={handleSubmitProject}
         onCancelEdit={resetForm}
       />
-      <h1>Projects</h1>
 
-      <button onClick={handleLogout}>Logout</button>
       {projects.map((project) => (
         <ProjectCard
           key={project.id}
