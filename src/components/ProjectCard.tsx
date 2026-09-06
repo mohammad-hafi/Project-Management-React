@@ -14,21 +14,26 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="project-card">
       <h2>{project.name}</h2>
       <p>{project.description}</p>
 
-      <button type="button" onClick={() => navigate(`/projects/${project.id}`)}>
-        View
-      </button>
+      <div className="project-actions">
+        <button
+          type="button"
+          onClick={() => navigate(`/projects/${project.id}`)}
+        >
+          View
+        </button>
 
-      <button type="button" onClick={() => onEdit(project)}>
-        Edit
-      </button>
+        <button type="button" onClick={() => onEdit(project)}>
+          Edit
+        </button>
 
-      <button type="button" onClick={() => onDelete(project.id)}>
-        Delete
-      </button>
+        <button type="button" onClick={() => onDelete(project.id)}>
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

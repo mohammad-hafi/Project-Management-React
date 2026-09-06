@@ -1,4 +1,5 @@
-import { createContext, useState, useContext, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { AuthContext } from "./authContextValue";
 import { login as loginRequest } from "../api/auth.api";
 import {
   getAccessToken,
@@ -6,21 +7,13 @@ import {
   setAccessToken,
 } from "./tokenStorage";
 
-type AuthContextType = {
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 type AuthProviderProps = {
   children: ReactNode;
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    Boolean(getAccessToken),
+    Boolean(getAccessToken()),
   );
 
   async function login(email: string, password: string) {
@@ -46,13 +39,4 @@ export function AuthProvider({ children }: AuthProviderProps) {
       {children}
     </AuthContext.Provider>
   );
-}
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used inside AuthProvider");
-  }
-
-  return context;
 }

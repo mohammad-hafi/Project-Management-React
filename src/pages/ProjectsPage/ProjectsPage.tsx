@@ -1,7 +1,7 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "../../components/ProjectForm";
-import { useAuth } from "../../auth/AuthContext";
+import { useAuth } from "../../auth/useAuth";
 import {
   getProjects,
   createProject,
@@ -10,6 +10,7 @@ import {
 } from "../../api/projects.api";
 import type { Project } from "../../types/project";
 import ProjectCard from "../../components/ProjectCard";
+import Paginate from "../../components/Pagination";
 
 export default function ProjectsPage() {
   const [name, setName] = useState("");
@@ -81,14 +82,7 @@ export default function ProjectsPage() {
       }
       await loadProjects();
 
-      setEditingProjectId(null);
-
-      setName("");
-      setDescription("");
-      setStatusId(1);
-      setPriorityLevel(1);
-      setStartDate("");
-      setTargetDate("");
+      resetForm();
     } catch (error) {
       console.error("SAVE PROJECT ERROR:", error);
       setCreateError("Failed to save project.");
@@ -96,8 +90,17 @@ export default function ProjectsPage() {
       setIsCreating(false);
     }
   }
-
-  async function loadProjects() {
+  function resetForm() {
+    setEditingProjectId(null);
+    setName("");
+    setDescription("");
+    setStatusId(1);
+    setPriorityLevel(1);
+    setStartDate("");
+    setTargetDate("");
+    setCreateError("");
+  }
+  const loadProjects = useCallback(async () => {
     setIsLoading(true);
     setError("");
     try {
@@ -111,10 +114,11 @@ export default function ProjectsPage() {
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [pageNumber]);
+
   useEffect(() => {
     loadProjects();
-  }, [pageNumber]);
+  }, [loadProjects]);
 
   function handleLogout() {
     logout();
@@ -147,15 +151,7 @@ export default function ProjectsPage() {
         onStartDateChange={setStartDate}
         onTargetDateChange={setTargetDate}
         onSubmit={handleSubmitProject}
-        onCancelEdit={() => {
-          setEditingProjectId(null);
-          setName("");
-          setDescription("");
-          setStatusId(1);
-          setPriorityLevel(1);
-          setStartDate("");
-          setTargetDate("");
-        }}
+        onCancelEdit={resetForm}
       />
       <h1>Projects</h1>
 
@@ -169,25 +165,11 @@ export default function ProjectsPage() {
         />
       ))}
 
-      <div>
-        <button
-          onClick={() => setPageNumber((current) => current - 1)}
-          disabled={pageNumber === 1}
-        >
-          Previous
-        </button>
-
-        <span>
-          Page {pageNumber} of {totalPages}
-        </span>
-
-        <button
-          onClick={() => setPageNumber((current) => current + 1)}
-          disabled={pageNumber === totalPages}
-        >
-          Next
-        </button>
-      </div>
+      <Paginate
+        PageNumberChange={setPageNumber}
+        TotalPage={totalPages}
+        PageNumber={pageNumber}
+      />
     </main>
   );
 }

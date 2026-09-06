@@ -40,7 +40,7 @@ export default function ProjectForm({
   onCancelEdit,
 }: ProjectFormProps) {
   return (
-    <form onSubmit={onSubmit}>
+    <form className="project-form" onSubmit={onSubmit}>
       <h2>{isEditing ? "Edit Project" : "Create Project"}</h2>
 
       <div>
