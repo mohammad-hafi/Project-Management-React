@@ -47,40 +47,90 @@ export default function LoginPage() {
   }
 
   return (
-    <main>
-      <h1>Login</h1>
+    <main className="login-page">
+      <section className="login-intro" aria-label="Project Manager">
+        <a className="login-brand" href="/login">
+          <span className="login-brand-mark" aria-hidden="true">PM</span>
+          <span>Project Manager</span>
+        </a>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email</label>
-
-          <input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
+        <div className="login-intro-copy">
+          <p className="login-eyebrow">One workspace. Clear progress.</p>
+          <h1>Keep every project moving forward.</h1>
+          <p>
+            Plan the work, see what matters, and keep your team aligned from
+            the first brief to the final handoff.
+          </p>
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
-
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
+        <div className="login-plan" aria-hidden="true">
+          <div className="login-plan-header">
+            <span>Today&apos;s plan</span>
+            <span>3 active</span>
+          </div>
+          <div className="login-plan-row">
+            <span className="login-plan-dot dot-blue" />
+            <span>Product launch</span>
+            <i className="login-plan-track track-blue" />
+          </div>
+          <div className="login-plan-row">
+            <span className="login-plan-dot dot-mint" />
+            <span>Research review</span>
+            <i className="login-plan-track track-mint" />
+          </div>
+          <div className="login-plan-row">
+            <span className="login-plan-dot dot-gold" />
+            <span>Client handoff</span>
+            <i className="login-plan-track track-gold" />
+          </div>
         </div>
+      </section>
 
-        {error && <p>{error}</p>}
+      <section className="login-panel">
+        <div className="login-card">
+          <div className="login-heading">
+            <p className="login-eyebrow">Welcome back</p>
+            <h2>Sign in to your workspace</h2>
+            <p>Use your work email to continue.</p>
+          </div>
 
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <div className="login-field">
+              <label htmlFor="email">Email address</label>
+
+              <input
+                id="email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@company.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div>
+
+            <div className="login-field">
+              <label htmlFor="password">Password</label>
+
+              <input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+              />
+            </div>
+
+            {error && <p className="login-error" role="alert">{error}</p>}
+
+            <button className="login-submit" type="submit" disabled={isLoading}>
+              {isLoading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
+        </div>
+      </section>
     </main>
   );
 }
