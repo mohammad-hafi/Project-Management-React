@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../auth/useAuth";
 
@@ -49,10 +49,10 @@ export default function LoginPage() {
   return (
     <main className="login-page">
       <section className="login-intro" aria-label="Project Manager">
-        <a className="login-brand" href="/login">
+        <Link className="login-brand" to="/login">
           <span className="login-brand-mark" aria-hidden="true">PM</span>
           <span>Project Manager</span>
-        </a>
+        </Link>
 
         <div className="login-intro-copy">
           <p className="login-eyebrow">One workspace. Clear progress.</p>
@@ -128,6 +128,10 @@ export default function LoginPage() {
             <button className="login-submit" type="submit" disabled={isLoading}>
               {isLoading ? "Signing in…" : "Sign in"}
             </button>
+
+            <p className="login-alternate">
+              Need an account? <Link to="/register">Create one</Link>
+            </p>
           </form>
         </div>
       </section>

@@ -4,8 +4,15 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  accessToken: string;
-  tokenType: string;
-  expiresIn: number;
-  ttl: number;
+  token: string;
+}
+
+export interface RegisterRequest {
+  name: string;
+  description: string;
+  email: string;
+  department: string;
+  password: string;
+  jobTitle: string;
+  statusId: number;
 }

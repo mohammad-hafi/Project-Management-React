@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import type { LoginRequest, LoginResponse } from "../types/auth";
+import type { LoginRequest, LoginResponse, RegisterRequest } from "../types/auth";
 
 export async function login(
   credentials: LoginRequest
@@ -10,4 +10,8 @@ export async function login(
   );
 
   return response.data;
+}
+
+export async function register(credentials: RegisterRequest): Promise<void> {
+  await apiClient.post("/Users/register", credentials);
 }

@@ -459,6 +459,69 @@ button:disabled {
   outline-offset: 3px;
 }
 
+.login-alternate {
+  margin: -4px 0 0;
+  color: #6b8189;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-alternate a {
+  color: #17665e;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.login-alternate a:hover {
+  text-decoration: underline;
+}
+
+.register-page {
+  grid-template-columns: minmax(330px, 0.8fr) minmax(520px, 1.2fr);
+}
+
+.register-card {
+  width: min(100%, 650px);
+}
+
+.registration-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+}
+
+.registration-description,
+.registration-password,
+.registration-error,
+.registration-form > .login-submit,
+.registration-form > .login-alternate {
+  grid-column: 1 / -1;
+}
+
+.password-hint {
+  color: #71878e;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.registration-success h2 {
+  margin: 0;
+  color: #173843;
+  font-size: 34px;
+  letter-spacing: -0.04em;
+}
+
+.registration-success > p:not(.login-eyebrow) {
+  margin: 14px 0 28px;
+  color: #69818a;
+  line-height: 1.6;
+}
+
+.success-link {
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+}
+
 /* Edit button */
 
 .project-actions button:first-of-type {
@@ -548,6 +611,22 @@ button:disabled {
   .login-card {
     padding: 30px 24px;
     border-radius: 16px;
+  }
+
+  .register-page {
+    display: block;
+  }
+
+  .registration-form {
+    grid-template-columns: 1fr;
+  }
+
+  .registration-description,
+  .registration-password,
+  .registration-error,
+  .registration-form > .login-submit,
+  .registration-form > .login-alternate {
+    grid-column: auto;
   }
 }
 

@@ -19,7 +19,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function login(email: string, password: string) {
     const response = await loginRequest({ email, password });
 
-    setAccessToken(response.accessToken);
+    setAccessToken(response.token);
 
     setIsAuthenticated(true);
   }
