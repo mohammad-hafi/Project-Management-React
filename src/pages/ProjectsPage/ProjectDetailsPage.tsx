@@ -57,34 +57,36 @@ export default function ProjectDetailsPage() {
   }, [projectId]);
 
   if (isLoading) {
-    return <p>Loading project...</p>;
+    return <div className="workspace-state">Loading project…</div>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <div className="workspace-state workspace-state-error">{error}</div>;
   }
 
   if (!project) {
-    return <p>Project not found.</p>;
+    return <div className="workspace-state">Project not found.</div>;
   }
 
   return (
-    <main>
-      <Link to="/projects" replace>
-        ← Back to Projects
-      </Link>
-
-      <h1>{project.name}</h1>
-
-      <p>{project.description}</p>
-
-      <p>
-        Priority Level: {priorityLabels[project.priorityLevel] ?? "Unspecified"}
-      </p>
-
-      <p>Start Date: {formatDate(project.startDate)}</p>
-
-      <p>Target Date: {formatDate(project.targetDate)}</p>
-    </main>
+    <section className="project-detail">
+      <Link className="back-link" to="/projects">← Back to projects</Link>
+      <div className="project-detail-header">
+        <div>
+          <p className="workspace-eyebrow">Project overview</p>
+          <h1>{project.name}</h1>
+          <p>{project.description}</p>
+        </div>
+        <span className={`priority-pill priority-${Math.min(project.priorityLevel, 3)}`}>
+          {priorityLabels[project.priorityLevel] ?? "Unspecified"}
+        </span>
+      </div>
+      <dl className="project-detail-grid">
+        <div><dt>Priority</dt><dd>{priorityLabels[project.priorityLevel] ?? "Unspecified"}</dd></div>
+        <div><dt>Project ID</dt><dd>#{project.id}</dd></div>
+        <div><dt>Started</dt><dd>{formatDate(project.startDate)}</dd></div>
+        <div><dt>Target date</dt><dd>{formatDate(project.targetDate)}</dd></div>
+      </dl>
+    </section>
   );
 }

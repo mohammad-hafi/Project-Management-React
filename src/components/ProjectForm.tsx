@@ -37,9 +37,15 @@ export default function ProjectForm({
 }: ProjectFormProps) {
   return (
     <form className="project-form" onSubmit={onSubmit}>
-      <h2>{isEditing ? "Edit Project" : "Create Project"}</h2>
+      <div className="form-heading">
+        <div>
+          <p className="workspace-eyebrow">{isEditing ? "Project settings" : "New project"}</p>
+          <h2>{isEditing ? "Refine the plan" : "Start something clear"}</h2>
+        </div>
+        {isEditing && <button className="button-quiet" type="button" onClick={onCancelEdit}>Cancel</button>}
+      </div>
 
-      <div>
+      <div className="form-field form-field-wide">
         <label htmlFor="name">Name</label>
         <input
           id="name"
@@ -50,7 +56,7 @@ export default function ProjectForm({
         />
       </div>
 
-      <div>
+      <div className="form-field form-field-wide">
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
@@ -60,7 +66,7 @@ export default function ProjectForm({
         />
       </div>
 
-      <div>
+      <div className="form-field">
         <label htmlFor="priorityLevel">Priority Level</label>
         <select
           id="priorityLevel"
@@ -77,7 +83,7 @@ export default function ProjectForm({
         </select>
       </div>
 
-      <div>
+      <div className="form-field">
         <label htmlFor="startDate">Start Date</label>
         <input
           id="startDate"
@@ -88,7 +94,7 @@ export default function ProjectForm({
         />
       </div>
 
-      <div>
+      <div className="form-field">
         <label htmlFor="targetDate">Target Date</label>
         <input
           id="targetDate"
@@ -99,21 +105,17 @@ export default function ProjectForm({
         />
       </div>
 
-      {createError && <p>{createError}</p>}
+      {createError && <p className="form-error" role="alert">{createError}</p>}
 
-      <button type="submit" disabled={isCreating}>
+      <div className="form-actions">
+      <button className="button-primary" type="submit" disabled={isCreating}>
         {isCreating
           ? "Saving..."
           : isEditing
             ? "Update Project"
             : "Create Project"}
       </button>
-
-      {isEditing && (
-        <button type="button" onClick={onCancelEdit}>
-          Cancel Edit
-        </button>
-      )}
+      </div>
     </form>
   );
 }

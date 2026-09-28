@@ -13,13 +13,19 @@ export default function AppLayout() {
   return (
     <>
       <header className="app-header">
-        <h1>Project Manager</h1>
+        <Link className="app-brand" to="/projects">
+          <span className="app-brand-mark" aria-hidden="true">PM</span>
+          <span>
+            <strong>Project Manager</strong>
+            <small>Workspace</small>
+          </span>
+        </Link>
 
         <nav className="app-nav">
-          <Link to="/projects">Projects</Link>
+          <Link to="/projects">All projects</Link>
 
           <button type="button" onClick={handleLogout}>
-            Logout
+            Sign out
           </button>
         </nav>
       </header>

@@ -13,13 +13,37 @@ export default function ProjectCard({
   onDelete,
 }: ProjectCardProps) {
   const navigate = useNavigate();
+  const dueDate = new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeZone: "UTC",
+  });
+  const priorityLabel = ["", "Low", "Medium", "High", "Urgent", "Critical"][project.priorityLevel] ?? "Unspecified";
+
   return (
-    <div className="project-card">
-      <h2>{project.name}</h2>
+    <article className="project-card">
+      <div className="project-card-topline">
+        <span className={`priority-pill priority-${Math.min(project.priorityLevel, 3)}`}>
+          {priorityLabel}
+        </span>
+        <span className="project-status">Project #{project.id}</span>
+      </div>
+      <h3>{project.name}</h3>
       <p>{project.description}</p>
+
+      <dl className="project-meta">
+        <div>
+          <dt>Target date</dt>
+          <dd>{dueDate.format(new Date(project.targetDate))}</dd>
+        </div>
+        <div>
+          <dt>Priority</dt>
+          <dd>{priorityLabel}</dd>
+        </div>
+      </dl>
 
       <div className="project-actions">
         <button
+          className="project-view"
           type="button"
           onClick={() => navigate(`/projects/${project.id}`)}
         >
@@ -34,6 +58,6 @@ export default function ProjectCard({
           Delete
         </button>
       </div>
-    </div>
+    </article>
   );
 }

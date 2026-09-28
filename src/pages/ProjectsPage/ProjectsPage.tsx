@@ -115,14 +115,26 @@ export default function ProjectsPage() {
   }, [loadProjects]);
 
   if (isLoading) {
-    return <p>Loading projects...</p>;
+    return <div className="workspace-state">Loading your projects…</div>;
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <div className="workspace-state workspace-state-error">{error}</div>;
   }
   return (
-    <main>
+    <div className="workspace">
+      <section className="workspace-hero">
+        <div>
+          <p className="workspace-eyebrow">Project portfolio</p>
+          <h1>Keep the work in motion.</h1>
+          <p>Plan new initiatives, review what&apos;s underway, and keep every deadline visible.</p>
+        </div>
+        <div className="workspace-count" aria-label={`${projects.length} projects on this page`}>
+          <strong>{projects.length}</strong>
+          <span>on this page</span>
+        </div>
+      </section>
+
       <ProjectForm
         name={name}
         description={description}
@@ -141,20 +153,36 @@ export default function ProjectsPage() {
         onCancelEdit={resetForm}
       />
 
-      {projects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          onEdit={handleEditProject}
-          onDelete={handleDelete}
-        />
-      ))}
+      <section className="projects-section" aria-labelledby="projects-heading">
+        <div className="section-heading">
+          <div>
+            <p className="workspace-eyebrow">Your projects</p>
+            <h2 id="projects-heading">In progress</h2>
+          </div>
+          <span>{projects.length} shown</span>
+        </div>
+
+        {projects.length === 0 ? (
+          <div className="empty-projects">No projects yet. Create the first one above to get started.</div>
+        ) : (
+          <div className="project-grid">
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                onEdit={handleEditProject}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+      </section>
 
       <Paginate
         PageNumberChange={setPageNumber}
         TotalPage={totalPages}
         PageNumber={pageNumber}
       />
-    </main>
+    </div>
   );
 }

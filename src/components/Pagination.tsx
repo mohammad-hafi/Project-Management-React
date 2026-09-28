@@ -10,7 +10,7 @@ export default function Paginate({
   TotalPage,
 }: PaginateProps) {
   return (
-    <div>
+    <nav className="pagination" aria-label="Project pagination">
       <button
         onClick={() => PageNumberChange(PageNumber - 1)}
         disabled={PageNumber === 1}
@@ -18,7 +18,7 @@ export default function Paginate({
         Previous
       </button>
 
-      <span>
+      <span className="pagination-status">
         Page {PageNumber} of {TotalPage}
       </span>
 
@@ -28,6 +28,6 @@ export default function Paginate({
       >
         Next
       </button>
-    </div>
+    </nav>
   );
 }
