@@ -12,6 +12,12 @@ const priorityLabels: Record<number, string> = {
   5: "Critical",
 };
 
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeZone: "UTC",
+  }).format(new Date(value));
+
 export default function ProjectDetailsPage() {
   const { projectId } = useParams();
 
@@ -76,9 +82,9 @@ export default function ProjectDetailsPage() {
         Priority Level: {priorityLabels[project.priorityLevel] ?? "Unspecified"}
       </p>
 
-      <p>Start Date: {project.startDate}</p>
+      <p>Start Date: {formatDate(project.startDate)}</p>
 
-      <p>Target Date: {project.targetDate}</p>
+      <p>Target Date: {formatDate(project.targetDate)}</p>
     </main>
   );
 }

@@ -28,6 +28,8 @@ export default function ProjectsPage() {
 
   const pageSize = 3;
 
+  const toIsoDate = (date: string) => `${date}T00:00:00.000Z`;
+
   function handleEditProject(project: Project) {
     setEditingProjectId(project.id);
 
@@ -35,8 +37,8 @@ export default function ProjectsPage() {
     setDescription(project.description);
     setPriorityLevel(project.priorityLevel);
 
-    setStartDate(project.startDate.slice(0, 16));
-    setTargetDate(project.targetDate.slice(0, 16));
+    setStartDate(project.startDate.slice(0, 10));
+    setTargetDate(project.targetDate.slice(0, 10));
   }
   async function handleDelete(id: number) {
     try {
@@ -61,8 +63,8 @@ export default function ProjectsPage() {
         description,
         statusId: 1,
         priorityLevel,
-        startDate: new Date(startDate).toISOString(),
-        targetDate: new Date(targetDate).toISOString(),
+        startDate: toIsoDate(startDate),
+        targetDate: toIsoDate(targetDate),
       };
 
       if (editingProjectId === null) {

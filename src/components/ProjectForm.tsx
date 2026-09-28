@@ -81,7 +81,7 @@ export default function ProjectForm({
         <label htmlFor="startDate">Start Date</label>
         <input
           id="startDate"
-          type="datetime-local"
+          type="date"
           value={startDate}
           onChange={(event) => onStartDateChange(event.target.value)}
           required
@@ -92,7 +92,7 @@ export default function ProjectForm({
         <label htmlFor="targetDate">Target Date</label>
         <input
           id="targetDate"
-          type="datetime-local"
+          type="date"
           value={targetDate}
           onChange={(event) => onTargetDateChange(event.target.value)}
           required
