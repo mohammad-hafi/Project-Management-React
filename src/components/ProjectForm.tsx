@@ -1,7 +1,6 @@
 type ProjectFormProps = {
   name: string;
   description: string;
-  statusId: number;
   priorityLevel: number;
   startDate: string;
   targetDate: string;
@@ -11,7 +10,6 @@ type ProjectFormProps = {
 
   onNameChange: (value: string) => void;
   onDescriptionChange: (value: string) => void;
-  onStatusIdChange: (value: number) => void;
   onPriorityLevelChange: (value: number) => void;
   onStartDateChange: (value: string) => void;
   onTargetDateChange: (value: string) => void;
@@ -23,7 +21,6 @@ type ProjectFormProps = {
 export default function ProjectForm({
   name,
   description,
-  statusId,
   priorityLevel,
   startDate,
   targetDate,
@@ -32,7 +29,6 @@ export default function ProjectForm({
   isEditing,
   onNameChange,
   onDescriptionChange,
-  onStatusIdChange,
   onPriorityLevelChange,
   onStartDateChange,
   onTargetDateChange,
@@ -65,27 +61,20 @@ export default function ProjectForm({
       </div>
 
       <div>
-        <label htmlFor="statusId">Status ID</label>
-        <input
-          id="statusId"
-          type="number"
-          value={statusId}
-          onChange={(event) => onStatusIdChange(Number(event.target.value))}
-          required
-        />
-      </div>
-
-      <div>
         <label htmlFor="priorityLevel">Priority Level</label>
-        <input
+        <select
           id="priorityLevel"
-          type="number"
           value={priorityLevel}
           onChange={(event) =>
             onPriorityLevelChange(Number(event.target.value))
           }
-          required
-        />
+        >
+          <option value={1}>Low</option>
+          <option value={2}>Medium</option>
+          <option value={3}>High</option>
+          <option value={4}>Urgent</option>
+          <option value={5}>Critical</option>
+        </select>
       </div>
 
       <div>

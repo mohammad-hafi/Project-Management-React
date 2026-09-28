@@ -13,7 +13,6 @@ import Paginate from "../../components/Pagination";
 export default function ProjectsPage() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [statusId, setStatusId] = useState(1);
   const [priorityLevel, setPriorityLevel] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [targetDate, setTargetDate] = useState("");
@@ -34,7 +33,6 @@ export default function ProjectsPage() {
 
     setName(project.name);
     setDescription(project.description);
-    setStatusId(project.statusId);
     setPriorityLevel(project.priorityLevel);
 
     setStartDate(project.startDate.slice(0, 16));
@@ -61,7 +59,7 @@ export default function ProjectsPage() {
       const projectData = {
         name,
         description,
-        statusId,
+        statusId: 1,
         priorityLevel,
         startDate: new Date(startDate).toISOString(),
         targetDate: new Date(targetDate).toISOString(),
@@ -89,7 +87,6 @@ export default function ProjectsPage() {
     setEditingProjectId(null);
     setName("");
     setDescription("");
-    setStatusId(1);
     setPriorityLevel(1);
     setStartDate("");
     setTargetDate("");
@@ -127,7 +124,6 @@ export default function ProjectsPage() {
       <ProjectForm
         name={name}
         description={description}
-        statusId={statusId}
         priorityLevel={priorityLevel}
         startDate={startDate}
         targetDate={targetDate}
@@ -136,7 +132,6 @@ export default function ProjectsPage() {
         isEditing={editingProjectId !== null}
         onNameChange={setName}
         onDescriptionChange={setDescription}
-        onStatusIdChange={setStatusId}
         onPriorityLevelChange={setPriorityLevel}
         onStartDateChange={setStartDate}
         onTargetDateChange={setTargetDate}
