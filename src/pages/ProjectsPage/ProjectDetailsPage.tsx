@@ -4,6 +4,14 @@ import axios from "axios";
 import { getProjectById } from "../../api/projects.api";
 import type { Project } from "../../types/project";
 
+const priorityLabels: Record<number, string> = {
+  1: "Low",
+  2: "Medium",
+  3: "High",
+  4: "Urgent",
+  5: "Critical",
+};
+
 export default function ProjectDetailsPage() {
   const { projectId } = useParams();
 
@@ -64,9 +72,9 @@ export default function ProjectDetailsPage() {
 
       <p>{project.description}</p>
 
-      <p>Status ID: {project.statusId}</p>
-
-      <p>Priority Level: {project.priorityLevel}</p>
+      <p>
+        Priority Level: {priorityLabels[project.priorityLevel] ?? "Unspecified"}
+      </p>
 
       <p>Start Date: {project.startDate}</p>
 
