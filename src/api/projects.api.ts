@@ -38,9 +38,10 @@ export async function deleteProject(id:number):Promise<void>
 
 export async function updateProject(project:UpdateProjectRequest):Promise<Project>
 {
+    const { id, ...update } = project;
     const responce= await apiClient.put<Project>(
-    "/projects/update",
-    project)
+    `/projects/${id}`,
+    update)
 
     return responce.data;
 }
